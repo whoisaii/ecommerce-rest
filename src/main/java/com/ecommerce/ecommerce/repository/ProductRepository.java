@@ -72,18 +72,22 @@ public class ProductRepository {
         }
     }
    //UPDATE
-   public void updateProduct(int id) {
-       String sql = " UPDATE products SET name = ?, price = ? WHERE id = ?";
+   public void updateProduct(int id, Product product) {
+       String sql = "UPDATE products SET name = ?, price = ? WHERE id = ?";
 
        try (Connection conn = getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-           ps.setDouble(2,price);
+           ps.setString(1, product.getName());
+           ps.setDouble(2, product.getPrice());
            ps.setInt(3, id);
+
            ps.executeUpdate();
 
        } catch (SQLException e) {
            e.printStackTrace();
        }
    }
+
+
 }

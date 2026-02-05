@@ -33,4 +33,12 @@ public class ProductController {
     public void deleteProduct(@PathVariable int id) {
         repository.deleteProduct(id);
     }
+    @PutMapping("/{id}")
+    public void updateProduct(
+            @PathVariable int id,
+            @RequestBody Product product
+    ) {
+        repository.updateProduct(id, product);
+    }
+
 }
