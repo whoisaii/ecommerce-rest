@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ecommerce App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>🛍 Ecommerce Products</h1>
+
+    <div class="card">
+        <h2>Add product</h2>
+        <input id="name" placeholder="Product name">
+        <input id="price" type="number" placeholder="Price">
+        <button onclick="addProduct()">Add</button>
+    </div>
+
+    <div class="card">
+        <h2>Product list</h2>
+        <button onclick="loadProducts()">Load products</button>
+        <ul id="products"></ul>
+    </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 package com.ecommerce.ecommerce.controller;
 
 import com.ecommerce.ecommerce.model.Product;
-import com.ecommerce.ecommerce.repository.ProductRepository;
+import com.ecommerce.ecommerce.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,35 +10,34 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    private final ProductRepository repository;
+    private final ProductService service;
 
-    public ProductController(ProductRepository repository) {
-        this.repository = repository;
+    public ProductController(ProductService service) {
+        this.service = service;
     }
 
     // GET http://localhost:8080/products
     @GetMapping
-    public List<Product> getAllProducts() {
-        return repository.getAllProducts();
+    public List<Product> getAll() {
+        return service.getAll();
     }
 
     // POST http://localhost:8080/products
     @PostMapping
-    public void addProduct(@RequestBody Product product) {
-        repository.addProduct(product);
+    public void add(@RequestBody Product product) {
+        service.add(product);
     }
 
-    // DELETE http://localhost:8080/products/5
-    @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable int id) {
-        repository.deleteProduct(id);
-    }
+    // PUT http://localhost:8080/products/1
     @PutMapping("/{id}")
-    public void updateProduct(
-            @PathVariable int id,
-            @RequestBody Product product
-    ) {
-        repository.updateProduct(id, product);
+    public void update(@PathVariable int id,
+                       @RequestBody Product product) {
+        service.update(id, product);
     }
 
+    // DELETE http://localhost:8080/products/1
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable int id) {
+        service.delete(id);
+    }
 }

@@ -1,31 +1,38 @@
 package com.ecommerce.ecommerce.repository;
 
+import com.ecommerce.ecommerce.config.DatabaseConfig;
 import com.ecommerce.ecommerce.model.Product;
-import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
 public class ProductRepository {
 
-    private final String URL = "jdbc:postgresql://localhost:5432/ecommerce";
-    private final String USER = "postgres";
-    private final String PASSWORD = "1234";
+    // CREATE
+    public void add(Product product) {
+        String sql = "INSERT INTO products(name, price) VALUES (?, ?)";
 
-    private Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        try (Connection c = DatabaseConfig.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, product.getName());
+            ps.setDouble(2, product.getPrice());
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    // GET ALL
-    public List<Product> getAllProducts() {
+    // READ
+    public List<Product> getAll() {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM products";
 
-        try (Connection conn = getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+        try (Connection c = DatabaseConfig.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
                 products.add(new Product(
@@ -34,60 +41,43 @@ public class ProductRepository {
                         rs.getDouble("price")
                 ));
             }
-        } catch (SQLException e) {
+
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
         return products;
     }
 
-    // ADD
-    public void addProduct(Product product) {
-        String sql = "INSERT INTO products (id, name, price) VALUES (?, ?, ?)";
+    // UPDATE
+    public void update(int id, Product product) {
+        String sql = "UPDATE products SET name = ?, price = ? WHERE id = ?";
 
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection c = DatabaseConfig.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
-            ps.setInt(1, product.getId());
-            ps.setString(2, product.getName());
-            ps.setDouble(3, product.getPrice());
+            ps.setString(1, product.getName());
+            ps.setDouble(2, product.getPrice());
+            ps.setInt(3, id);
             ps.executeUpdate();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     // DELETE
-    public void deleteProduct(int id) {
-        String sql = "DELETE FROM products WHERE id=?";
+    public void delete(int id) {
+        String sql = "DELETE FROM products WHERE id = ?";
 
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection c = DatabaseConfig.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setInt(1, id);
             ps.executeUpdate();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
-   //UPDATE
-   public void updateProduct(int id, Product product) {
-       String sql = "UPDATE products SET name = ?, price = ? WHERE id = ?";
-
-       try (Connection conn = getConnection();
-            PreparedStatement ps = conn.prepareStatement(sql)) {
-
-           ps.setString(1, product.getName());
-           ps.setDouble(2, product.getPrice());
-           ps.setInt(3, id);
-
-           ps.executeUpdate();
-
-       } catch (SQLException e) {
-           e.printStackTrace();
-       }
-   }
-
-
 }
