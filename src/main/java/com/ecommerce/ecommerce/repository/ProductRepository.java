@@ -1,15 +1,11 @@
 package com.ecommerce.ecommerce.repository;
-
 import com.ecommerce.ecommerce.config.DatabaseConfig;
 import com.ecommerce.ecommerce.model.Product;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductRepository {
-
-    // CREATE
     public void add(Product product) {
         String sql = "INSERT INTO products(name, price) VALUES (?, ?)";
 
@@ -24,8 +20,6 @@ public class ProductRepository {
             e.printStackTrace();
         }
     }
-
-    // READ
     public List<Product> getAll() {
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM products";
@@ -48,8 +42,6 @@ public class ProductRepository {
 
         return products;
     }
-
-    // UPDATE
     public void update(int id, Product product) {
         String sql = "UPDATE products SET name = ?, price = ? WHERE id = ?";
 
@@ -65,8 +57,6 @@ public class ProductRepository {
             e.printStackTrace();
         }
     }
-
-    // DELETE
     public void delete(int id) {
         String sql = "DELETE FROM products WHERE id = ?";
 

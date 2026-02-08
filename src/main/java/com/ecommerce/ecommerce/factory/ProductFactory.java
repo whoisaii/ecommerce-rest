@@ -1,5 +1,4 @@
 package com.ecommerce.ecommerce.factory;
-
 import com.ecommerce.ecommerce.model.Product;
 
 public class ProductFactory {

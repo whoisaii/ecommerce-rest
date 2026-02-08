@@ -1,7 +1,5 @@
 package com.ecommerce.ecommerce.model;
-
 import java.util.Objects;
-
 public class Product {
     private int id;
     private String name;
@@ -15,7 +13,6 @@ public class Product {
         setPrice(price);
     }
 
-    // encapsulation + validation
     public void setName(String name) {
         if (name == null || name.isBlank())
             throw new IllegalArgumentException("Product name cannot be empty");

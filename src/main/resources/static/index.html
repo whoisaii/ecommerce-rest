@@ -1,29 +1,265 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Ecommerce App</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commerce X</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script defer src="./app.js"></script>
 </head>
+
 <body>
+<div class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <div class="logoMark">X</div>
+            <div class="logoText">
+                <div class="logoTitle">LOGO</div>
+                <div class="logoSub">Store UI</div>
+            </div>
+        </div>
 
-<div class="container">
-    <h1>🛍 Ecommerce Products</h1>
+        <div class="sideBlock">
+            <div class="sideTitle">
+                Categories <span class="caret">▾</span>
+            </div>
+            <nav class="sideNav" id="sideNav"></nav>
+        </div>
 
-    <div class="card">
-        <h2>Add product</h2>
-        <input id="name" placeholder="Product name">
-        <input id="price" type="number" placeholder="Price">
-        <button onclick="addProduct()">Add</button>
-    </div>
+        <div class="sideSpacer"></div>
 
-    <div class="card">
-        <h2>Product list</h2>
-        <button onclick="loadProducts()">Load products</button>
-        <ul id="products"></ul>
+        <div class="sideFoot">
+            <div class="tiny">Open source UI • CRUD from DB</div>
+            <div class="social">
+                <a href="#" aria-label="instagram">◎</a>
+                <a href="#" aria-label="twitter">◌</a>
+                <a href="#" aria-label="facebook">◍</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+        <!-- TOP BAR -->
+        <header class="topbar">
+            <div class="searchWrap">
+                <input id="searchInput" class="search" placeholder="Find the product you need" />
+                <button class="xBtn" id="btnClearSearch" title="Clear">×</button>
+            </div>
+
+            <div class="topActions">
+                <button class="btn btnGhost" id="btnReload">Reload</button>
+                <button class="btn btnPrimary" id="btnAddOpen">+ Add</button>
+                <button class="btn btnBlue" id="btnSignup">Sign up</button>
+            </div>
+        </header>
+
+        <!-- BANNER -->
+        <section class="banner">
+            <div class="bannerInfo">
+                <div class="stars">★★★★★</div>
+                <div class="bannerTitle">[VR] Virtual Reality</div>
+                <div class="bannerText">
+                    Clean storefront UI with categories, filtering and CRUD. Data comes from your PostgreSQL DB.
+                </div>
+                <div class="bannerBtns">
+                    <button class="btn btnWhite" id="btnExplore">Order now</button>
+                    <button class="btn btnGhost" id="btnSeed">Seed demo</button>
+                    <button class="btn btnDanger" id="btnClearTable">Clear table</button>
+                </div>
+                <div class="dots" aria-hidden="true">
+                    <span></span><span class="on"></span><span></span><span></span><span></span>
+                </div>
+            </div>
+
+            <div class="bannerImg" aria-hidden="true"></div>
+            <div class="priceTag">$80.99</div>
+        </section>
+
+        <!-- FILTER ROW -->
+        <section class="filters">
+            <div class="tabs">
+                <button class="tab on" data-tab="top">Top</button>
+                <button class="tab" data-tab="popular">Popular</button>
+                <button class="tab" data-tab="recommended">recommended</button>
+            </div>
+
+            <div class="filterControls">
+                <select id="brandSelect" class="select">
+                    <option value="all">Brands</option>
+                    <option value="Razer">Razer</option>
+                    <option value="Logitech">Logitech</option>
+                    <option value="Apple">Apple</option>
+                    <option value="Sony">Sony</option>
+                    <option value="Microsoft">Microsoft</option>
+                </select>
+
+                <select id="sortSelect" class="select">
+                    <option value="none">Sort</option>
+                    <option value="price_asc">Price ↑</option>
+                    <option value="price_desc">Price ↓</option>
+                    <option value="name_asc">Name A→Z</option>
+                </select>
+
+                <button class="btn btnGhost" id="btnOpenFilter">Filter ×</button>
+            </div>
+        </section>
+
+        <!-- FILTER PANEL -->
+        <section class="filterPanel" id="filterPanel" hidden>
+            <div class="fpRow">
+                <label>
+                    Min price
+                    <input id="minPrice" type="number" placeholder="0" />
+                </label>
+                <label>
+                    Max price
+                    <input id="maxPrice" type="number" placeholder="99999999" />
+                </label>
+                <button class="btn btnPrimary" id="btnApplyFilter">Apply</button>
+                <button class="btn btnGhost" id="btnResetFilter">Reset</button>
+            </div>
+        </section>
+
+        <!-- PRODUCTS GRID -->
+        <section class="gridHead">
+            <div class="gridTitle">Products</div>
+            <div class="gridMeta" id="gridMeta">0 items</div>
+        </section>
+
+        <section class="grid" id="grid"></section>
+
+        <!-- TOP PRODUCT -->
+        <section class="topProduct">
+            <div class="tpTitle">Top Product</div>
+            <div class="tpCards">
+                <div class="tpCard">
+                    <div class="tpImg tpPs5"></div>
+                    <div class="tpInfo">
+                        <div class="tpPrice">$300</div>
+                        <div class="tpName">Playstation 5</div>
+                        <div class="tpDesc">Best console for next-gen gaming.</div>
+                        <button class="btn btnPrimary" id="btnOrderPs">Order Now</button>
+                    </div>
+                </div>
+                <div class="tpCard">
+                    <div class="tpImg tpXbox"></div>
+                    <div class="tpInfo">
+                        <div class="tpPrice">$600</div>
+                        <div class="tpName">Microsoft Xbox</div>
+                        <div class="tpDesc">Powerful performance and game pass.</div>
+                        <button class="btn btnGreen" id="btnOrderXbox">Order Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CATEGORIES CARDS -->
+        <section class="catCards">
+            <div class="ccTitle">CATEGORIES</div>
+            <div class="ccRow">
+                <div class="ccCard" data-cat="Phone">
+                    <div class="ccText">
+                        <div class="ccName">Phone</div>
+                        <div class="ccSmall">Explore</div>
+                    </div>
+                    <div class="ccImg ccPhone"></div>
+                </div>
+                <div class="ccCard" data-cat="Console">
+                    <div class="ccText">
+                        <div class="ccName">Console</div>
+                        <div class="ccSmall">Explore</div>
+                    </div>
+                    <div class="ccImg ccConsole"></div>
+                </div>
+                <div class="ccCard" data-cat="Gadget">
+                    <div class="ccText">
+                        <div class="ccName">Gadget</div>
+                        <div class="ccSmall">Explore</div>
+                    </div>
+                    <div class="ccImg ccGadget"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="fcol">
+                <div class="fLogo">X LOGO</div>
+                <div class="fText">
+                    Open source is source code that is made freely available for possible modification and redistribution.
+                </div>
+            </div>
+            <div class="fcol">
+                <div class="fHead">Explore</div>
+                <a href="#">Explore house</a>
+                <a href="#">Playoffs</a>
+            </div>
+            <div class="fcol">
+                <div class="fHead">Innovate</div>
+                <a href="#">Tags</a>
+                <a href="#">API</a>
+                <a href="#">Places</a>
+                <a href="#">Creative Markets</a>
+            </div>
+            <div class="fcol">
+                <div class="fHead">About</div>
+                <a href="#">Community</a>
+                <a href="#">Sellers</a>
+                <a href="#">Support</a>
+                <a href="#">Terms of service</a>
+            </div>
+        </footer>
+
+        <div class="copyright">All Rights Reserved</div>
+    </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal" aria-hidden="true">
+    <div class="modalBg" id="modalBg"></div>
+    <div class="modalCard">
+        <div class="modalHead">
+            <div>
+                <div class="modalTitle" id="modalTitle">Add product</div>
+                <div class="muted">ID is generated by DB. Name, price, category, brand.</div>
+            </div>
+            <button class="xBtn" id="modalClose">×</button>
+        </div>
+
+        <form id="form" class="form">
+            <input type="hidden" id="id" />
+
+            <label>
+                Name
+                <input id="name" required maxlength="100" placeholder="Oculus Quest" />
+            </label>
+
+            <label>
+                Price
+                <input id="price" required type="number" min="0" step="1" placeholder="250000" />
+            </label>
+
+            <label>
+                Category
+                <select id="category" class="select"></select>
+            </label>
+
+            <label>
+                Brand (optional)
+                <input id="brand" maxlength="40" placeholder="Razer / Logitech / Apple..." />
+            </label>
+
+            <div class="formBtns">
+                <button type="button" class="btn btnGhost" id="btnCancel">Cancel</button>
+                <button class="btn btnPrimary" type="submit">Save</button>
+            </div>
+        </form>
     </div>
 </div>
 
-<script src="app.js"></script>
+<div class="toast" id="toast"></div>
 </body>
 </html>
